@@ -55,10 +55,11 @@ def genetic_algorithm(bef_group):
         if father == mother:
             continue
         else:
-            f_x = bef_group[father].get_sub_x()
-            f_y = bef_group[father].get_sub_y()
-            m_x = bef_group[mother].get_sub_x()
-            m_y = bef_group[mother].get_sub_y()
+            cut_p = random.randint(1, gene_size - 1)
+            f_x = bef_group[father].get_sub_x(cut_p)
+            f_y = bef_group[father].get_sub_y(cut_p)
+            m_x = bef_group[mother].get_sub_x(cut_p)
+            m_y = bef_group[mother].get_sub_y(cut_p)
             new_bro = f_x + m_y
             new_sis = m_x + f_y
             # 变异

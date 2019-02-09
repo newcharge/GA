@@ -65,10 +65,10 @@ class Individual:
         elif Strategy.base_strategy[strategy] == 'eat' and current_state != 'bean':
             self.goal -= 1
 
-    def get_sub_x(self):
+    def get_sub_x(self, cut_point):
         sim_code = self.st.get_sim_code()
-        return sim_code[0:121]
+        return sim_code[0:cut_point]
 
-    def get_sub_y(self):
+    def get_sub_y(self, cut_point):
         sim_code = self.st.get_sim_code()
-        return sim_code[121:243]
+        return sim_code[cut_point:243]

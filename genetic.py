@@ -5,7 +5,7 @@ import random
 
 exec_time = 100
 action_time = 200
-mutation_prob = 0.005
+mutation_prob = 0.01
 gene_size = 243
 evo_time = 1000
 # 以下参数不可随意更改了
@@ -63,26 +63,33 @@ def genetic_algorithm(bef_group):
             new_bro = f_x + m_y
             new_sis = m_x + f_y
             # 变异
-            while random.random() < mutation_prob:
-                gene_i = random.randint(0, gene_size - 1)
-                random_num = random.randint(0, 6)
-                while random_num == new_bro[gene_i]:
-                    random_num = random.randint(0, 6)
-                new_bro_list = list(new_bro)
-                new_bro_list[gene_i] = str(random_num)
-                new_bro = "".join(new_bro_list)
+            new_bro_list = list(new_bro)
+            for gene_i in range(gene_size):
+                if random.random() < mutation_prob:
 
-            while random.random() < mutation_prob:
-                gene_i = random.randint(0, gene_size - 1)
-                random_num = random.randint(0, 6)
-                while random_num == new_sis[gene_i]:
+                    print("!", end="")
+
                     random_num = random.randint(0, 6)
-                new_sis_list = list(new_sis)
-                new_sis_list[gene_i] = str(random_num)
-                new_sis = "".join(new_sis_list)
+                    while random_num == new_bro_list[gene_i]:
+                        random_num = random.randint(0, 6)
+                    new_bro_list[gene_i] = str(random_num)
+            new_bro = "".join(new_bro_list)
+
+            new_sis_list = list(new_sis)
+            for gene_i in range(gene_size):
+                if random.random() < mutation_prob:
+
+                    print("!", end="")
+
+                    random_num = random.randint(0, 6)
+                    while random_num == new_sis_list[gene_i]:
+                        random_num = random.randint(0, 6)
+                    new_sis_list[gene_i] = str(random_num)
+            new_sis = "".join(new_sis_list)
 
             next_group.append(Individual(st=Strategy(sim_code=new_bro)))
             next_group.append(Individual(st=Strategy(sim_code=new_sis)))
+    print()
     return next_group
 
 

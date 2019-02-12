@@ -7,7 +7,7 @@
 
 
 class Strategy:
-    states = {"wall", "bean", "nothing"}
+    states = ["bean", "wall", "nothing"]
     base_strategy = {0: 'north', 1: 'east', 2: 'south', 3: 'west', 4: 'stay', 5: 'eat', 6: 'auto'}
 
     def __init__(self, *, sim_code="default"):

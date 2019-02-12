@@ -5,7 +5,7 @@ import random
 
 exec_time = 100
 action_time = 200
-mutation_prob = 0.0000247
+mutation_prob = 0.005
 gene_size = 243
 evo_time = 1000
 # 以下参数不可随意更改了

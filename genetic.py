@@ -1,6 +1,7 @@
 from individual import Individual
 from strategy import Strategy
 from map import Map
+from multiprocessing import Pool
 import random
 
 exec_time = 100
@@ -14,6 +15,7 @@ p_size = 200 - 70
 
 
 def cal_adaptability(individual, act_time):
+    individual.goal = 0
     sup_map = Map(max_x=10, max_y=10, bean_rate=0.5, wall_rate=0)
     # sup_map.print_map()
     bean_map = sup_map.inner_map
@@ -22,16 +24,19 @@ def cal_adaptability(individual, act_time):
     return individual.goal
 
 
+def exec_job(individual):
+    goal_list = []
+    for exec_num in range(exec_time):
+        goal_list.append(cal_adaptability(individual, action_time))
+    adaptability = sum(goal_list) // len(goal_list)
+    individual.goal = adaptability
+    # print("one's goal:", individual.goal)
+    return individual
+
+
 def genetic_algorithm(bef_group):
-    # 执行任务并计算适应度
-    for individual in bef_group:
-        goal_list = []
-        for exec_num in range(exec_time):
-            goal_list.append(cal_adaptability(individual, action_time))
-            individual.goal = 0
-        adaptability = sum(goal_list) // len(goal_list)
-        individual.goal = adaptability
-        # print("one's goal:", individual.goal)
+    # 并行执行任务并计算适应度
+    bef_group = list(pool.map(exec_job, bef_group))
     bef_group.sort(key=lambda x: x.goal, reverse=True)
 
     sample = list(map(lambda x: x.goal, bef_group))
@@ -95,33 +100,37 @@ def genetic_algorithm(bef_group):
     return next_group
 
 
-# 生成初始群体
-group = []
-for group_index in range(group_size):
-    # 生成随机代码
-    gene_list = []
-    for gene_index in range(gene_size):
-        gene_list.append(str(random.randint(0, 6)))
-    sim_code = "".join(gene_list)
-    group.append(Individual(st=Strategy(sim_code=sim_code)))
+if __name__ == "__main__":
+    pool = Pool(4)
+    # 生成初始群体
+    group = []
+    for group_index in range(group_size):
+        # 生成随机代码
+        gene_list = []
+        for gene_index in range(gene_size):
+            gene_list.append(str(random.randint(0, 6)))
+        sim_code = "".join(gene_list)
+        group.append(Individual(st=Strategy(sim_code=sim_code)))
 
-for evo_num in range(evo_time):
-    print("evolution----------", evo_num)
-    group = genetic_algorithm(group)
+    for evo_num in range(evo_time):
+        print("evolution----------", evo_num)
+        group = genetic_algorithm(group)
 
-for ele in group:
-    gl = []
-    for i in range(10000):
-        b_map = Map(max_x=10, max_y=10, bean_rate=0.5, wall_rate=0).inner_map
-        for j in range(action_time):
-            ele.movement(bean_map=b_map)
-        gl.append(ele.goal)
-        ele.goal = 0
-    ans = sum(gl) // len(gl)
-    ele.goal = ans
-    # print("one's goal:", individual.goal)
-group.sort(key=lambda x: x.goal, reverse=True)
-print("1:", group[0].goal)
-group[0].st.print_table()
-print("2:", group[1].goal)
-group[1].st.print_sim_table()
+    for ele in group:
+        gl = []
+        for i in range(10000):
+            b_map = Map(max_x=10, max_y=10, bean_rate=0.5, wall_rate=0).inner_map
+            for j in range(action_time):
+                ele.movement(bean_map=b_map)
+            gl.append(ele.goal)
+            ele.goal = 0
+        ans = sum(gl) // len(gl)
+        ele.goal = ans
+        # print("one's goal:", individual.goal)
+    group.sort(key=lambda x: x.goal, reverse=True)
+    print("1:", group[0].goal)
+    group[0].st.print_table()
+    print("2:", group[1].goal)
+    group[1].st.print_sim_table()
+    pool.close()
+    pool.join()

@@ -18,18 +18,18 @@ from individual import Individual
 # print(test_one.get_sub_y(242))
 # print(len(test_one.get_sub_y(242)))
 #
-from genetic import cal_adaptability
-
-print("test")
-individual = Individual(st=Strategy(sim_code="500500500500500500500500500500500500500500500500500500500500500500500500500500500511511511511511511511511511522522522533564533533522522522522522533511511533511511511511511511511511511511511522522522533500500533566566522522522533566566533566566"))
-individual.st.print_table()
-li = []
-for i in range(10000):
-    li.append(cal_adaptability(individual, 200))
-    individual.goal = 0
-li.sort(reverse=True)
-individual.goal = sum(li) // len(li)
-print(li)
-print(individual.goal)
-print(individual.x)
-print(individual.y)
+# from genetic import cal_adaptability
+#
+# print("test")
+# individual = Individual(st=Strategy(sim_code="500500500500500500500500500500500500500500500500500500500500500500500500500500500511511511511511511511511511522522522533564533533522522522522522533511511533511511511511511511511511511511511522522522533500500533566566522522522533566566533566566"))
+# individual.st.print_table()
+# li = []
+# for i in range(10000):
+#     li.append(cal_adaptability(individual, 200))
+#     individual.goal = 0
+# li.sort(reverse=True)
+# individual.goal = sum(li) // len(li)
+# print(li)
+# print(individual.goal)
+# print(individual.x)
+# print(individual.y)

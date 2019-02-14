@@ -5,7 +5,7 @@ import random
 
 exec_time = 100
 action_time = 200
-mutation_prob = 0.01
+mutation_prob = 0.005
 gene_size = 243
 evo_time = 1000
 # 以下参数不可随意更改了
@@ -37,6 +37,8 @@ def genetic_algorithm(bef_group):
     sample = list(map(lambda x: x.goal, bef_group))
     print(sample)
     print("均值：", sum(sample) // len(sample), "最大值：", max(sample), "最小值", min(sample))
+    print("顶端策略：", end="")
+    bef_group[0].st.print_sim_table()
 
     # 进化
     selector = []
@@ -109,7 +111,7 @@ for evo_num in range(evo_time):
 
 for ele in group:
     gl = []
-    for i in range(exec_time):
+    for i in range(10000):
         b_map = Map(max_x=10, max_y=10, bean_rate=0.5, wall_rate=0).inner_map
         for j in range(action_time):
             ele.movement(bean_map=b_map)
